@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface UseScrollAnimationOptions {
   threshold?: number
@@ -8,27 +8,30 @@ interface UseScrollAnimationOptions {
 
 export function useScrollAnimation(options: UseScrollAnimationOptions = {}) {
   const { threshold = 0.15, rootMargin = '0px 0px -50px 0px', triggerOnce = true } = options
-  const ref = useRef<HTMLDivElement>(null)
+  const [node, setNode] = useState<HTMLDivElement | null>(null)
   const [isVisible, setIsVisible] = useState(false)
 
+  const ref = useCallback((el: HTMLDivElement | null) => {
+    setNode(el)
+  }, [])
+
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
+    if (!node) return
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true)
-          if (triggerOnce) observer.unobserve(el)
+          if (triggerOnce) observer.unobserve(node)
         } else if (!triggerOnce) {
           setIsVisible(false)
         }
       },
       { threshold, rootMargin }
     )
-    observer.observe(el)
+    observer.observe(node)
     return () => observer.disconnect()
-  }, [threshold, rootMargin, triggerOnce])
+  }, [node, threshold, rootMargin, triggerOnce])
 
   return { ref, isVisible }
 }
