@@ -6,3 +6,7 @@
 **/*.user
 **/*.suo
 **/appsettings.Development.json
+frontend/
+logo.png
+README.md
+.git/
