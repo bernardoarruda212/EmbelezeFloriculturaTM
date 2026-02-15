@@ -12,6 +12,8 @@ export interface Product {
   categoryNames: string[]
   createdAt: string
   updatedAt: string | null
+  variationCount: number
+  variations: ProductVariation[]
 }
 
 export interface ProductDetail extends Product {

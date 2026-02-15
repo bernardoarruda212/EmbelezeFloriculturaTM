@@ -9,7 +9,7 @@ export default function WhatsAppFloat() {
 
   if (!phone) return null
 
-  const url = buildWhatsAppUrl(phone, 'Ola! Gostaria de mais informacoes sobre os produtos da Floricultura Embeleze.')
+  const url = buildWhatsAppUrl(phone, 'Ol\u00e1! Gostaria de mais informa\u00e7\u00f5es sobre os produtos da Floricultura Embeleze.')
 
   return (
     <a

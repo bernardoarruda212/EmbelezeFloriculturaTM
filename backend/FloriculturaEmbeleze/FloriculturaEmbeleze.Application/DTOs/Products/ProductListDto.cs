@@ -13,4 +13,6 @@ public class ProductListDto
     public string? MainImageUrl { get; set; }
     public List<string> CategoryNames { get; set; } = new();
     public DateTime CreatedAt { get; set; }
+    public int VariationCount { get; set; }
+    public List<ProductVariationDto> Variations { get; set; } = new();
 }

@@ -23,6 +23,7 @@ public class ProductService : IProductService
     {
         var query = _context.Products
             .Include(p => p.Images)
+            .Include(p => p.Variations)
             .Include(p => p.ProductCategories)
                 .ThenInclude(pc => pc.Category)
             .AsQueryable();
@@ -90,7 +91,16 @@ public class ProductService : IProductService
                 CategoryNames = p.ProductCategories
                     .Select(pc => pc.Category.Name)
                     .ToList(),
-                CreatedAt = p.CreatedAt
+                CreatedAt = p.CreatedAt,
+                VariationCount = p.Variations.Count,
+                Variations = p.Variations.Select(v => new ProductVariationDto
+                {
+                    Id = v.Id,
+                    Name = v.Name,
+                    Price = v.Price,
+                    StockQuantity = v.StockQuantity,
+                    IsActive = v.IsActive
+                }).ToList()
             })
             .ToListAsync();
 
@@ -131,6 +141,7 @@ public class ProductService : IProductService
     {
         return await _context.Products
             .Include(p => p.Images)
+            .Include(p => p.Variations)
             .Include(p => p.ProductCategories)
                 .ThenInclude(pc => pc.Category)
             .Where(p => p.IsFeatured && p.IsActive)
@@ -157,7 +168,16 @@ public class ProductService : IProductService
                 CategoryNames = p.ProductCategories
                     .Select(pc => pc.Category.Name)
                     .ToList(),
-                CreatedAt = p.CreatedAt
+                CreatedAt = p.CreatedAt,
+                VariationCount = p.Variations.Count,
+                Variations = p.Variations.Select(v => new ProductVariationDto
+                {
+                    Id = v.Id,
+                    Name = v.Name,
+                    Price = v.Price,
+                    StockQuantity = v.StockQuantity,
+                    IsActive = v.IsActive
+                }).ToList()
             })
             .ToListAsync();
     }

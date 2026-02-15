@@ -24,7 +24,7 @@ export default function HomePage() {
 
   const phone = settings?.whatsAppNumber || ''
   const whatsappUrl = phone
-    ? buildWhatsAppUrl(phone, 'Ola! Gostaria de mais informacoes sobre os produtos da Floricultura Embeleze.')
+    ? buildWhatsAppUrl(phone, 'Ol\u00e1! Gostaria de mais informa\u00e7\u00f5es sobre os produtos da Floricultura Embeleze.')
     : '#'
 
   useEffect(() => {

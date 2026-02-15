@@ -115,7 +115,7 @@ export default function ContactPage() {
             {/* WhatsApp */}
             {phone && (
               <a
-                href={buildWhatsAppUrl(phone, 'Ola! Gostaria de mais informacoes.')}
+                href={buildWhatsAppUrl(phone, 'Ol\u00e1! Gostaria de mais informa\u00e7\u00f5es.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="card-top-accent bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center group"
