@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="FloriculturaEmbeleze.API/FloriculturaEmbeleze.API.csproj" />
+  <Project Path="FloriculturaEmbeleze.Application/FloriculturaEmbeleze.Application.csproj" />
+  <Project Path="FloriculturaEmbeleze.Domain/FloriculturaEmbeleze.Domain.csproj" />
+  <Project Path="FloriculturaEmbeleze.Infrastructure/FloriculturaEmbeleze.Infrastructure.csproj" />
+</Solution>

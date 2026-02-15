@@ -1,0 +1,214 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-navy: #1a4c8a;
+  --color-brand-blue: #2c8bd1;
+  --color-brand-sky: #4fa8e0;
+  --color-brand-pink: #d85c8a;
+  --color-brand-pink-light: #fce8f0;
+  --color-brand-green: #48bb78;
+  --color-brand-yellow: #f7d730;
+  --color-brand-bg: #f0f7ff;
+  --color-text-dark: #2d3748;
+  --color-text-medium: #4a5568;
+  --color-text-light: #718096;
+  --font-family-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-bg text-text-dark font-sans antialiased;
+    line-height: 1.7;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ===== SCROLL ANIMATION SYSTEM ===== */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-on-scroll.animate-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-on-scroll.animate-from-left {
+  transform: translateX(-40px);
+}
+.animate-on-scroll.animate-from-left.animate-visible {
+  transform: translateX(0);
+}
+
+.animate-on-scroll.animate-from-right {
+  transform: translateX(40px);
+}
+.animate-on-scroll.animate-from-right.animate-visible {
+  transform: translateX(0);
+}
+
+.animate-on-scroll.animate-scale {
+  transform: scale(0.9);
+}
+.animate-on-scroll.animate-scale.animate-visible {
+  transform: scale(1);
+}
+
+/* ===== KEYFRAME ANIMATIONS ===== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(3deg); }
+}
+
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.5); }
+  50% { box-shadow: 0 0 0 12px rgba(72, 187, 120, 0); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-pulse-green {
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+/* Gradient text effect */
+.text-gradient-pink-blue {
+  background: linear-gradient(135deg, #d85c8a, #4fa8e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-blue-navy {
+  background: linear-gradient(135deg, #4fa8e0, #1a4c8a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section heading decorative underline */
+.heading-ornament {
+  position: relative;
+  display: inline-block;
+}
+
+.heading-ornament::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #d85c8a, #4fa8e0);
+}
+
+/* Admin heading ornament (left-aligned, blue tones) */
+.heading-ornament-left {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 10px;
+}
+
+.heading-ornament-left::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 48px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #2c8bd1, #4fa8e0);
+}
+
+/* Admin table gradient header */
+.admin-table-header {
+  background: linear-gradient(135deg, #f8fafc 0%, #f0f7ff 100%);
+}
+
+/* Shimmer loading animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(44, 139, 209, 0.04), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Card gradient top border */
+.card-top-accent {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-top-accent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #d85c8a, #2c8bd1);
+  z-index: 1;
+}
+
+/* Image hover gradient overlay */
+.img-hover-overlay {
+  position: relative;
+}
+
+.img-hover-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(26, 76, 138, 0.3), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.img-hover-overlay:hover::after {
+  opacity: 1;
+}
