@@ -104,12 +104,9 @@ builder.Services.AddScoped<IProductPromotionService, ProductPromotionService>();
 
 var app = builder.Build();
 
-// Swagger in development
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Swagger
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // Global error handling
 app.UseExceptionHandler(errorApp =>
@@ -141,7 +138,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Auto-migrate and seed in development
+// Auto-migrate and seed
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
