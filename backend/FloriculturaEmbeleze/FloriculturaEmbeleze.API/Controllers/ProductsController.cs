@@ -99,6 +99,14 @@ public class ProductsController : ControllerBase
         return Ok(new { imageUrl });
     }
 
+    [HttpPost("{id:guid}/images/url")]
+    [Authorize]
+    public async Task<ActionResult> AddProductImageByUrl(Guid id, [FromBody] AddImageUrlDto dto)
+    {
+        await _productService.AddProductImageAsync(id, dto.ImageUrl);
+        return Ok(new { imageUrl = dto.ImageUrl });
+    }
+
     [HttpDelete("{id:guid}/images/{imageId:guid}")]
     [Authorize]
     public async Task<IActionResult> DeleteProductImage(Guid id, Guid imageId)
@@ -123,3 +131,5 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
 }
+
+public record AddImageUrlDto(string ImageUrl);

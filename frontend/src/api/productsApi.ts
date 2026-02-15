@@ -31,6 +31,9 @@ export const productsApi = {
       headers: { 'Content-Type': 'multipart/form-data' },
     }),
 
+  addImageByUrl: (productId: string, imageUrl: string) =>
+    api.post<{ imageUrl: string }>(`/products/${productId}/images/url`, { imageUrl }),
+
   deleteImage: (productId: string, imageId: string) =>
     api.delete(`/products/${productId}/images/${imageId}`),
 

@@ -186,9 +186,25 @@ export default function ProductFormPage() {
 
       if (isEditing && existingProduct) {
         await productsApi.update(existingProduct.id, payload)
+
+        // Associate new images with the product
+        const existingImageUrls = existingProduct.images.map((img) => img.imageUrl)
+        for (const img of images) {
+          if (!existingImageUrls.includes(img.url)) {
+            await productsApi.addImageByUrl(existingProduct.id, img.url)
+          }
+        }
+
         toast.success('Produto atualizado com sucesso!')
       } else {
-        await productsApi.create(payload)
+        const created = await productsApi.create(payload)
+        const productId = created.data.id
+
+        // Associate uploaded images with the new product
+        for (const img of images) {
+          await productsApi.addImageByUrl(productId, img.url)
+        }
+
         toast.success('Produto criado com sucesso!')
       }
 
