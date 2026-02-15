@@ -1,48 +1,70 @@
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using FloriculturaEmbeleze.Application.Services.Interfaces;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace FloriculturaEmbeleze.Infrastructure.Services;
 
 public class ImageService : IImageService
 {
-    private readonly IWebHostEnvironment _environment;
+    private readonly Cloudinary _cloudinary;
 
-    public ImageService(IWebHostEnvironment environment)
+    public ImageService(IConfiguration configuration)
     {
-        _environment = environment;
+        var cloudName = configuration["Cloudinary:CloudName"];
+        var apiKey = configuration["Cloudinary:ApiKey"];
+        var apiSecret = configuration["Cloudinary:ApiSecret"];
+
+        var account = new Account(cloudName, apiKey, apiSecret);
+        _cloudinary = new Cloudinary(account);
     }
 
     public async Task<string> UploadImageAsync(Stream stream, string fileName)
     {
-        var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
-
-        if (!Directory.Exists(uploadsFolder))
-            Directory.CreateDirectory(uploadsFolder);
-
         var extension = Path.GetExtension(fileName).ToLowerInvariant();
         var uniqueFileName = $"{Guid.NewGuid()}{extension}";
-        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        var uploadParams = new ImageUploadParams
         {
-            await stream.CopyToAsync(fileStream);
-        }
+            File = new FileDescription(uniqueFileName, stream),
+            Folder = "embeleze/products",
+            PublicId = Path.GetFileNameWithoutExtension(uniqueFileName),
+            Overwrite = true,
+            Transformation = new Transformation().Quality("auto").FetchFormat("auto")
+        };
 
-        return $"/uploads/{uniqueFileName}";
+        var result = await _cloudinary.UploadAsync(uploadParams);
+
+        if (result.Error != null)
+            throw new InvalidOperationException($"Erro ao fazer upload da imagem: {result.Error.Message}");
+
+        return result.SecureUrl.ToString();
     }
 
-    public Task DeleteImageAsync(string imageUrl)
+    public async Task DeleteImageAsync(string imageUrl)
     {
         if (string.IsNullOrWhiteSpace(imageUrl))
-            return Task.CompletedTask;
+            return;
 
-        // Remove leading slash for path combination
-        var relativePath = imageUrl.TrimStart('/');
-        var filePath = Path.Combine(_environment.WebRootPath, relativePath);
+        // Extract public ID from Cloudinary URL
+        // URL format: https://res.cloudinary.com/{cloud}/image/upload/v123/embeleze/products/{id}.ext
+        try
+        {
+            var uri = new Uri(imageUrl);
+            var segments = uri.AbsolutePath.Split('/');
+            var uploadIndex = Array.IndexOf(segments, "upload");
+            if (uploadIndex < 0) return;
 
-        if (File.Exists(filePath))
-            File.Delete(filePath);
+            // Join everything after "upload/vXXX/" as the public ID (without extension)
+            var publicIdParts = segments.Skip(uploadIndex + 2).ToArray();
+            var publicId = string.Join("/", publicIdParts);
+            publicId = Path.ChangeExtension(publicId, null); // remove extension
 
-        return Task.CompletedTask;
+            await _cloudinary.DestroyAsync(new DeletionParams(publicId));
+        }
+        catch
+        {
+            // If URL parsing fails, skip deletion
+        }
     }
 }
